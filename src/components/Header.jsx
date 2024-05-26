@@ -3,12 +3,10 @@ import MoonIcon from './UI/Icons/MoonIcon';
 import SunIcon from './UI/Icons/SunIcon';
 
 export default function Header() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    setIsDarkMode(isDarkMode);
-  }, []);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const storedDarkMode = localStorage.getItem('darkMode');
+    return storedDarkMode === 'true';
+  });
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDarkMode);

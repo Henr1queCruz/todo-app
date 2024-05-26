@@ -1,16 +1,23 @@
 import { Reorder } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { v4 as uuidv4 } from 'uuid';
 import { DUMMY_TODOS } from '../dummy-todos';
-import FilterButton from './FilterButton';
+import GroupFilterButton from './GroupFilterButton';
 import Todo from './Todo';
 
 export default function TodoList() {
-  const [todos, setTodos] = useState(DUMMY_TODOS);
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = JSON.parse(localStorage.getItem('todos')) || DUMMY_TODOS;
+    return savedTodos;
+  });
   const [filterStatus, setFilterStatus] = useState('all');
   const isSmallScreen = useMediaQuery({ query: '(max-width: 540px)' });
   const todosLeft = todos.filter((todo) => !todo.completed).length;
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const handleEnterKey = (event) => {
     event.preventDefault();
@@ -106,27 +113,10 @@ export default function TodoList() {
           </p>
           {!isSmallScreen && (
             <div className="flex gap-3 font-bold">
-              <FilterButton
-                filter="all"
+              <GroupFilterButton
                 filterStatus={filterStatus}
-                onFilterStatus={handleFilterStatus}
-              >
-                All
-              </FilterButton>
-              <FilterButton
-                filter="active"
-                filterStatus={filterStatus}
-                onFilterStatus={handleFilterStatus}
-              >
-                Active
-              </FilterButton>
-              <FilterButton
-                filter="completed"
-                filterStatus={filterStatus}
-                onFilterStatus={handleFilterStatus}
-              >
-                Completed
-              </FilterButton>
+                handleFilterStatus={handleFilterStatus}
+              />
             </div>
           )}
           <button
@@ -140,32 +130,15 @@ export default function TodoList() {
 
       {isSmallScreen && (
         <div className="flex gap-5 justify-center rounded-md font-bold p-4 text-sm text-lightTheme-darkGrayishBlue dark:text-darkTheme-darkGrayishBlue bg-white dark:bg-darkTheme-veryDarkDesaturatedBlue mb-6">
-          <FilterButton
-            filter="all"
+          <GroupFilterButton
             filterStatus={filterStatus}
-            onFilterStatus={handleFilterStatus}
-          >
-            All
-          </FilterButton>
-          <FilterButton
-            filter="active"
-            filterStatus={filterStatus}
-            onFilterStatus={handleFilterStatus}
-          >
-            Active
-          </FilterButton>
-          <FilterButton
-            filter="completed"
-            filterStatus={filterStatus}
-            onFilterStatus={handleFilterStatus}
-          >
-            Completed
-          </FilterButton>
+            handleFilterStatus={handleFilterStatus}
+          />
         </div>
       )}
 
       <div className="text-center text-sm text-lightTheme-darkGrayishBlue dark:text-darkTheme-veryDarkGrayishBlue">
-        Drag and drop to reorder list
+        Drag and drop to reorder list (only available in all filters)
       </div>
     </>
   );

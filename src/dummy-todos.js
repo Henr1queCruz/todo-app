@@ -2,7 +2,7 @@ export const DUMMY_TODOS = [
   {
     id: 1,
     text: 'Complete online JavaScript course',
-    completed: false,
+    completed: true,
   },
   {
     id: 2,
