@@ -50,7 +50,7 @@ Users should be able to:
 
 ### Useful resources
 
-- [Drag and Drop](https://www.framer.com/motion/) - This helped me implement the drag and drop functionality.
+- [Framer Motion](https://www.framer.com/motion/) - This helped me implement the drag and drop functionality.
 
 ## Author
 
